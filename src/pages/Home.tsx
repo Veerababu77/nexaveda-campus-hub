@@ -1,14 +1,17 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { BookOpen, Award, Users, TrendingUp, Star, Clock, User } from 'lucide-react';
 import CourseDetailsModal from '../components/CourseDetailsModal';
+import EnrollmentModal from '../components/EnrollmentModal';
 
 const Home = () => {
   const { user, courses, certificates, allCourses } = useAuth();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAllCourses, setShowAllCourses] = useState(false);
+  const [isEnrollmentModalOpen, setIsEnrollmentModalOpen] = useState(false);
+  const [enrollmentCourse, setEnrollmentCourse] = useState(null);
 
   const stats = [
     {
@@ -44,6 +47,11 @@ const Home = () => {
     setIsModalOpen(true);
   };
 
+  const handleEnrollClick = (course) => {
+    setEnrollmentCourse(course);
+    setIsEnrollmentModalOpen(true);
+  };
+
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'Beginner': return 'bg-green-100 text-green-800';
@@ -52,6 +60,8 @@ const Home = () => {
       default: return 'bg-gray-100 text-gray-800';
     }
   };
+
+  const displayedCourses = showAllCourses ? allCourses : allCourses.slice(0, 6);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -174,11 +184,21 @@ const Home = () => {
         <div>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-gray-900">All Courses We Offer</h2>
-            <span className="text-gray-600">{allCourses.length} courses available</span>
+            <div className="flex items-center gap-4">
+              <span className="text-gray-600">{allCourses.length} courses available</span>
+              {!showAllCourses && allCourses.length > 6 && (
+                <button
+                  onClick={() => setShowAllCourses(true)}
+                  className="text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  View All Courses →
+                </button>
+              )}
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allCourses.map((course) => (
+            {displayedCourses.map((course) => (
               <div 
                 key={course.id}
                 onClick={() => handleCourseClick(course)}
@@ -234,6 +254,17 @@ const Home = () => {
               </div>
             ))}
           </div>
+
+          {showAllCourses && (
+            <div className="text-center mt-8">
+              <button
+                onClick={() => setShowAllCourses(false)}
+                className="text-blue-600 hover:text-blue-700 font-medium"
+              >
+                ← Show Less
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -245,6 +276,19 @@ const Home = () => {
           onClose={() => {
             setIsModalOpen(false);
             setSelectedCourse(null);
+          }}
+          onEnroll={handleEnrollClick}
+        />
+      )}
+
+      {/* Enrollment Modal */}
+      {enrollmentCourse && (
+        <EnrollmentModal
+          course={enrollmentCourse}
+          isOpen={isEnrollmentModalOpen}
+          onClose={() => {
+            setIsEnrollmentModalOpen(false);
+            setEnrollmentCourse(null);
           }}
         />
       )}

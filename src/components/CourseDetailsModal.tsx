@@ -22,9 +22,10 @@ interface CourseDetailsModalProps {
   course: AllCourse;
   isOpen: boolean;
   onClose: () => void;
+  onEnroll: (course: AllCourse) => void;
 }
 
-const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({ course, isOpen, onClose }) => {
+const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({ course, isOpen, onClose, onEnroll }) => {
   if (!isOpen) return null;
 
   const getDifficultyColor = (difficulty: string) => {
@@ -34,6 +35,11 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({ course, isOpen,
       case 'Advanced': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const handleEnrollClick = () => {
+    onEnroll(course);
+    onClose();
   };
 
   return (
@@ -94,11 +100,11 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({ course, isOpen,
                 )}
               </div>
               
-              <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors mb-2 w-full">
+              <button 
+                onClick={handleEnrollClick}
+                className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors w-full"
+              >
                 Enroll Now
-              </button>
-              <button className="border border-blue-600 text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors w-full">
-                Add to Wishlist
               </button>
             </div>
           </div>
