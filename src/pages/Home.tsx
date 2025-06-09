@@ -1,11 +1,14 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { BookOpen, Award, Users, TrendingUp } from 'lucide-react';
+import { BookOpen, Award, Users, TrendingUp, Star, Clock, User } from 'lucide-react';
+import CourseDetailsModal from '../components/CourseDetailsModal';
 
 const Home = () => {
-  const { user, courses, certificates } = useAuth();
+  const { user, courses, certificates, allCourses } = useAuth();
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const stats = [
     {
@@ -36,11 +39,25 @@ const Home = () => {
 
   const recentCourses = courses.slice(0, 3);
 
+  const handleCourseClick = (course) => {
+    setSelectedCourse(course);
+    setIsModalOpen(true);
+  };
+
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty) {
+      case 'Beginner': return 'bg-green-100 text-green-800';
+      case 'Intermediate': return 'bg-yellow-100 text-yellow-800';
+      case 'Advanced': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-6xl mx-auto px-6 py-16">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
               Welcome back, {user?.name}!
@@ -66,8 +83,8 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {stats.map((stat, index) => (
             <div key={index} className="bg-white rounded-xl shadow-md p-6">
@@ -130,7 +147,7 @@ const Home = () => {
         </div>
 
         {/* Recent Achievements */}
-        <div>
+        <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Recent Achievements</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {certificates.slice(0, 2).map((cert) => (
@@ -152,7 +169,85 @@ const Home = () => {
             ))}
           </div>
         </div>
+
+        {/* All Courses We Offer */}
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold text-gray-900">All Courses We Offer</h2>
+            <span className="text-gray-600">{allCourses.length} courses available</span>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allCourses.map((course) => (
+              <div 
+                key={course.id}
+                onClick={() => handleCourseClick(course)}
+                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
+              >
+                <img 
+                  src={course.image} 
+                  alt={course.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 flex-1">{course.title}</h3>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ml-2 ${getDifficultyColor(course.difficulty)}`}>
+                      {course.difficulty}
+                    </span>
+                  </div>
+                  
+                  <p className="text-gray-600 mb-4 line-clamp-2">{course.description}</p>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <User size={16} className="mr-1" />
+                      <span>{course.instructor}</span>
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Clock size={16} className="mr-1" />
+                      <span>{course.duration}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <Star className="text-yellow-500 mr-1" size={16} />
+                      <span className="text-sm font-medium">{course.rating}</span>
+                      <span className="text-xs text-gray-500 ml-1">({course.students})</span>
+                    </div>
+                    <span className="text-sm text-blue-600 font-medium">{course.category}</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <span className="text-2xl font-bold text-green-600">${course.price}</span>
+                      {course.originalPrice && (
+                        <span className="text-sm text-gray-500 line-through ml-2">${course.originalPrice}</span>
+                      )}
+                    </div>
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
+
+      {/* Course Details Modal */}
+      {selectedCourse && (
+        <CourseDetailsModal
+          course={selectedCourse}
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedCourse(null);
+          }}
+        />
+      )}
     </div>
   );
 };
