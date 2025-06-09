@@ -9,7 +9,7 @@ const Courses = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">My Courses</h1>
@@ -61,7 +61,7 @@ const Courses = () => {
                 </div>
 
                 {/* Course Stats */}
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex justify-between items-center text-sm mb-4">
                   <div className="flex items-center text-gray-500">
                     <TrendingUp size={16} className="mr-1" />
                     <span>{course.topics.length} Topics</span>
@@ -71,11 +71,9 @@ const Courses = () => {
                   </div>
                 </div>
 
-                {/* Continue Button */}
-                <div className="mt-4">
-                  <div className="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg text-center font-medium hover:bg-blue-100 transition-colors">
-                    {course.progress === 100 ? 'Review Course' : 'Continue Learning'}
-                  </div>
+                {/* View Button */}
+                <div className="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg text-center font-medium hover:bg-blue-100 transition-colors">
+                  View
                 </div>
               </div>
             </Link>

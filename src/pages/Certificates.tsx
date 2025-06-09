@@ -1,14 +1,23 @@
 
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Award, Download, Calendar, Star } from 'lucide-react';
+import { Award, Download } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Certificates = () => {
   const { certificates } = useAuth();
+  const { toast } = useToast();
+
+  const handleDownload = (certificateTitle: string) => {
+    toast({
+      title: "Certificate Downloaded!",
+      description: `${certificateTitle} certificate has been downloaded successfully.`,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">My Certificates</h1>
@@ -37,11 +46,9 @@ const Certificates = () => {
                   
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center text-gray-600">
-                      <Calendar size={16} className="mr-2" />
                       <span className="text-sm">Issued on {certificate.issueDate}</span>
                     </div>
                     <div className="flex items-center text-gray-600">
-                      <Star size={16} className="mr-2" />
                       <span className="text-sm">Score: {certificate.score}%</span>
                     </div>
                   </div>
@@ -59,16 +66,14 @@ const Certificates = () => {
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex space-x-3">
-                    <button className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
-                      <Download size={16} />
-                      <span>Download</span>
-                    </button>
-                    <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                      View
-                    </button>
-                  </div>
+                  {/* Download Action */}
+                  <button 
+                    onClick={() => handleDownload(certificate.courseTitle)}
+                    className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <Download size={16} />
+                    <span>Download</span>
+                  </button>
                 </div>
               </div>
             ))}
@@ -87,43 +92,6 @@ const Certificates = () => {
             >
               Browse Courses
             </a>
-          </div>
-        )}
-
-        {/* Achievement Summary */}
-        {certificates.length > 0 && (
-          <div className="mt-12 bg-white rounded-xl shadow-md p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Achievement Summary</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="bg-blue-100 rounded-full w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                  <Award size={24} className="text-blue-600" />
-                </div>
-                <p className="text-3xl font-bold text-gray-900">{certificates.length}</p>
-                <p className="text-gray-600">Certificates Earned</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="bg-green-100 rounded-full w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                  <Star size={24} className="text-green-600" />
-                </div>
-                <p className="text-3xl font-bold text-gray-900">
-                  {(certificates.reduce((acc, cert) => acc + cert.score, 0) / certificates.length).toFixed(1)}%
-                </p>
-                <p className="text-gray-600">Average Score</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="bg-purple-100 rounded-full w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                  <Calendar size={24} className="text-purple-600" />
-                </div>
-                <p className="text-3xl font-bold text-gray-900">
-                  {new Date().getFullYear()}
-                </p>
-                <p className="text-gray-600">Latest Year</p>
-              </div>
-            </div>
           </div>
         )}
       </div>
