@@ -46,7 +46,7 @@ const Profile = () => {
 
   const totalCourses = courses.length;
   const completedCourses = courses.filter(course => course.progress === 100).length;
-  const averageProgress = courses.reduce((acc, course) => acc + course.progress, 0) / courses.length || 0;
+  const attendance = courses.reduce((acc, course) => acc + course.progress, 0) / courses.length || 0;
   const totalCertificates = certificates.length;
 
   return (
@@ -101,8 +101,8 @@ const Profile = () => {
               <div className="bg-purple-100 rounded-full w-12 h-12 mx-auto mb-2 flex items-center justify-center">
                 <User size={20} className="text-purple-600" />
               </div>
-              <p className="text-2xl font-bold text-gray-900">{averageProgress.toFixed(0)}%</p>
-              <p className="text-gray-600 text-sm">Avg Progress</p>
+              <p className="text-2xl font-bold text-gray-900">{attendance.toFixed(0)}%</p>
+              <p className="text-gray-600 text-sm">Attendance</p>
             </div>
             
             <div className="text-center">

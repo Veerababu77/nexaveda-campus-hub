@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -152,30 +153,6 @@ const Home = () => {
                   </div>
                 </div>
               </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Recent Achievements */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Recent Achievements</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {certificates.slice(0, 2).map((cert) => (
-              <div key={cert.id} className="bg-white rounded-xl shadow-md p-6">
-                <div className="flex items-center mb-4">
-                  <div className="bg-green-100 p-3 rounded-lg">
-                    <Award className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900">{cert.courseTitle}</h3>
-                    <p className="text-gray-600">Certificate Earned</p>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">Score: {cert.score}%</span>
-                  <span className="text-sm text-gray-500">{cert.issueDate}</span>
-                </div>
-              </div>
             ))}
           </div>
         </div>

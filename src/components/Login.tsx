@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -16,10 +16,10 @@ const Login = () => {
     e.preventDefault();
     setError('');
     
-    if (login(email, password)) {
+    if (login(emailOrPhone, password)) {
       navigate('/');
     } else {
-      setError('Invalid email or password');
+      setError('Invalid email/phone or password');
     }
   };
 
@@ -39,16 +39,16 @@ const Login = () => {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+              <label htmlFor="emailOrPhone" className="block text-sm font-medium text-gray-700 mb-2">
+                Email or Phone Number
               </label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="emailOrPhone"
+                type="text"
+                value={emailOrPhone}
+                onChange={(e) => setEmailOrPhone(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                placeholder="Enter your email"
+                placeholder="Enter your email or phone number"
                 required
               />
             </div>
@@ -90,13 +90,6 @@ const Login = () => {
               Sign In
             </button>
           </form>
-
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 text-center">
-              <strong>Demo:</strong> Use any email and password to login
-            </p>
-          </div>
         </div>
       </div>
     </div>
