@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -6,6 +5,7 @@ import { Clock, User, TrendingUp } from 'lucide-react';
 
 const Courses = () => {
   const { courses } = useAuth();
+  console.log(courses)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -43,7 +43,7 @@ const Courses = () => {
                   <User size={16} className="mr-1" />
                   <span className="mr-4">{course.instructor}</span>
                   <Clock size={16} className="mr-1" />
-                  <span>{course.duration}</span>
+                  <span>{course.duration} days</span>
                 </div>
 
                 {/* Progress Bar */}

@@ -1,12 +1,15 @@
+// types.ts
 
+// User info after login
 export interface User {
-  id: string;
-  name: string;
-  email: string;
+  id: string;                 // This maps to "student_id" from the login API
+  name: string;               // You can populate this later from profile API
+  email: string;              // Optional for now if not returned
   phone?: string;
   avatar?: string;
 }
 
+// Course data for enrolled users
 export interface Course {
   id: string;
   title: string;
@@ -35,6 +38,7 @@ export interface Course {
   }[];
 }
 
+// All available courses (public view)
 export interface AllCourse {
   id: string;
   title: string;
@@ -51,6 +55,7 @@ export interface AllCourse {
   topics: string[];
 }
 
+// Certificate data
 export interface Certificate {
   id: string;
   courseTitle: string;
@@ -59,19 +64,29 @@ export interface Certificate {
   certificateUrl: string;
 }
 
+// Login credentials
 export interface LoginCredentials {
-  emailOrPhone: string;
+  emailOrPhone: string;   // This maps to "username" field in your backend
   password: string;
 }
 
+// Enrollment payload
 export interface EnrollmentData {
   courseId: string;
   studentName: string;
   studentPhone: string;
 }
 
+// Generic API response wrapper
 export interface ApiResponse<T> {
   data: T;
   success: boolean;
   message?: string;
+  status?: number;       // Optional: maps to HTTP status like 200, 400, etc.
+}
+
+// Login token structure
+export interface AuthTokenData {
+  access: string;
+  refresh: string;
 }

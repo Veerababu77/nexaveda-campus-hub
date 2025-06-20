@@ -94,9 +94,9 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({ course, isOpen,
             
             <div className="text-right ml-8">
               <div className="mb-4">
-                <div className="text-3xl font-bold text-green-600">${course.price}</div>
+                <div className="text-3xl font-bold text-green-600">₹{course.price}</div>
                 {course.originalPrice && (
-                  <div className="text-lg text-gray-500 line-through">${course.originalPrice}</div>
+                  <div className="text-lg text-gray-500 line-through">₹{course.originalPrice}</div>
                 )}
               </div>
               

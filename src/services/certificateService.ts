@@ -1,60 +1,71 @@
-
 import { Certificate, ApiResponse } from '../types';
 
-// Mock data - replace with real API calls
-const mockCertificates: Certificate[] = [
-  {
-    id: '1',
-    courseTitle: 'UI/UX Design Principles',
-    issueDate: '2024-04-01',
-    score: 91,
-    certificateUrl: '#'
-  },
-  {
-    id: '2',
-    courseTitle: 'JavaScript Fundamentals',
-    issueDate: '2024-02-15',
-    score: 87,
-    certificateUrl: '#'
-  }
-];
-
 export const certificateService = {
-  // Replace with actual API call
-  getUserCertificates: async (userId: string): Promise<ApiResponse<Certificate[]>> => {
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      return {
-        data: mockCertificates,
-        success: true
-      };
-    } catch (error) {
+  getUserCertificates: async (): Promise<ApiResponse<Certificate[]>> => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
       return {
         data: [],
         success: false,
-        message: 'Failed to fetch certificates'
+        message: 'Access token not found. Please log in.'
+      };
+    }
+
+    try {
+      const response = await fetch('https://13.49.65.169/nexaveda/student_certificate/', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        const data: Certificate[] = result.data.map((item: any) => ({
+          id: item.id,
+          certificate_name: item.certificate_name,
+          issued_date: item.issued_date,
+          score: parseFloat(item.score),
+          grade: item.grade,
+          certificate_url: item.certificate_url
+        }));
+
+        return {
+          data,
+          success: true
+        };
+      } else {
+        return {
+          data: [],
+          success: false,
+          message: result.message || 'Failed to fetch certificates'
+        };
+      }
+    } catch (err) {
+      return {
+        data: [],
+        success: false,
+        message: 'Error connecting to the server'
       };
     }
   },
 
-  // Replace with actual API call
-  downloadCertificate: async (certificateId: string): Promise<ApiResponse<{ downloadUrl: string }>> => {
+  downloadCertificate: async (certificateUrl: string): Promise<ApiResponse<{ downloadUrl: string }>> => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // You could prepare for server-verified signed download links if needed
       return {
-        data: { downloadUrl: `#certificate_${certificateId}` },
+        data: { downloadUrl: certificateUrl },
         success: true,
-        message: 'Certificate download prepared'
+        message: 'Certificate ready to download'
       };
-    } catch (error) {
+    } catch (err) {
       return {
         data: null as any,
         success: false,
-        message: 'Failed to download certificate'
+        message: 'Download failed'
       };
     }
   }

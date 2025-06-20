@@ -1,88 +1,86 @@
-
+import axios from 'axios';
 import { User, LoginCredentials, ApiResponse } from '../types';
 
-// Mock data - replace with real API calls
-const mockUser: User = {
-  id: '1',
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  phone: '+1234567890',
-  avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150'
-};
+const BASE_URL = 'https://13.49.65.169'; // or your deployed backend URL
 
 export const authService = {
-  // Replace with actual API call
   login: async (credentials: LoginCredentials): Promise<ApiResponse<User>> => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock authentication - replace with real API
-      if (credentials.emailOrPhone && credentials.password) {
+      const response = await axios.post(`${BASE_URL}/nexaveda/login/`, {
+        username: credentials.emailOrPhone,
+        password: credentials.password
+      });
+
+      if (response.status === 200 && response.data.success) {
+        const { access, refresh, student_id, username } = response.data.data;
+
+        // ✅ Store tokens and user info properly
+        localStorage.setItem("accessToken", access);
+        localStorage.setItem("refreshToken", refresh);
+        localStorage.setItem("userId", student_id);
+        localStorage.setItem("username", username);
+
+        const user: User = {
+          id: student_id,
+          name: username,
+          email: '',
+          phone: username
+        };
+
         return {
-          data: mockUser,
+          data: user,
           success: true,
           message: 'Login successful'
         };
       }
-      
+
       return {
         data: null as any,
         success: false,
-        message: 'Invalid credentials'
+        message: response.data.message || 'Login failed'
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         data: null as any,
         success: false,
-        message: 'Login failed'
+        message: error?.response?.data?.message || 'Login failed'
       };
     }
   },
 
-  // Replace with actual API call
   logout: async (): Promise<ApiResponse<null>> => {
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      return {
-        data: null,
-        success: true,
-        message: 'Logout successful'
-      };
-    } catch (error) {
-      return {
-        data: null,
-        success: false,
-        message: 'Logout failed'
-      };
-    }
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    return {
+      data: null,
+      success: true,
+      message: 'Logout successful'
+    };
   },
 
-  // Replace with actual API call to get current user
   getCurrentUser: async (): Promise<ApiResponse<User | null>> => {
-    try {
-      // Check if user is logged in (localStorage, token, etc.)
-      const isLoggedIn = localStorage.getItem('isLoggedIn');
-      
-      if (isLoggedIn) {
-        return {
-          data: mockUser,
-          success: true
-        };
-      }
-      
+    const token = localStorage.getItem('accessToken');
+    const id = localStorage.getItem('userId');
+    const username = localStorage.getItem('username');
+
+    if (token && id && username) {
       return {
-        data: null,
+        data: {
+          id,
+          name: username,
+          email: '',
+          phone: username
+        },
         success: true
       };
-    } catch (error) {
-      return {
-        data: null,
-        success: false,
-        message: 'Failed to get user'
-      };
     }
+
+    return {
+      data: null,
+      success: false,
+      message: 'User not logged in'
+    };
   }
 };
