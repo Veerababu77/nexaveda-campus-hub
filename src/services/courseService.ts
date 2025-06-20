@@ -1,7 +1,7 @@
 import { Course, ApiResponse } from '../types';
 import { authFetch } from '../utils/authFetch';
 
-const BASE_URL = 'https://13.49.65.169/nexaveda';
+const BASE_URL = 'https://nexaveda.duckdns.org/nexaveda';
 
 export const courseService = {
   getUserCourses: async (): Promise<ApiResponse<Course[]>> => {

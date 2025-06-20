@@ -16,7 +16,7 @@ const CourseDetail = () => {
     const fetchCourseDetail = async () => {
       try {
         setLoading(true);
-        const res = await authFetch(`https://13.49.65.169/nexaveda/student_courses/${courseId}/`);
+        const res = await authFetch(`https://nexaveda.duckdns.org/nexaveda/student_courses/${courseId}/`);
         
         if (res.ok) {
           const result = await res.json();

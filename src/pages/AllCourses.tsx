@@ -22,7 +22,7 @@ const AllCourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get('https://13.49.65.169/nexaveda/courses/');
+        const res = await axios.get('https://nexaveda.duckdns.org/nexaveda/courses/');
         setCourses(res.data.data);
       } catch (error) {
         console.error('Failed to fetch all courses:', error);
@@ -40,7 +40,7 @@ const AllCourses = () => {
 
     try {
       const res = await axios.post(
-        `https://13.49.65.169/nexaveda/student_courses/${selectedCourse.id}/enroll/`,
+        `https://nexaveda.duckdns.org/nexaveda/student_courses/${selectedCourse.id}/enroll/`,
         {
           full_name: fullName,
           email: email,

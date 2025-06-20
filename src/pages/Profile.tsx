@@ -28,7 +28,7 @@ const Profile = () => {
       }
 
       try {
-        const response = await fetch("https://13.49.65.169/nexaveda/student_profile/", {
+        const response = await fetch("https://nexaveda.duckdns.org/nexaveda/student_profile/", {
           headers: {
             Authorization: `Bearer ${accessToken}`
           }
@@ -70,7 +70,7 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch("https://13.49.65.169/nexaveda/student_profile/", {
+      const response = await fetch("https://nexaveda.duckdns.org/nexaveda/student_profile/", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

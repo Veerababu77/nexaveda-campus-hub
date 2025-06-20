@@ -31,7 +31,7 @@ const Home = () => {
           return;
         }
 
-        const res = await axios.get('https://13.49.65.169/nexaveda/home_metrices/', {
+        const res = await axios.get('https://nexaveda.duckdns.org/nexaveda/home_metrices/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

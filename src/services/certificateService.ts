@@ -13,7 +13,7 @@ export const certificateService = {
     }
 
     try {
-      const response = await fetch('https://13.49.65.169/nexaveda/student_certificate/', {
+      const response = await fetch('https://nexaveda.duckdns.org/nexaveda/student_certificate/', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`,

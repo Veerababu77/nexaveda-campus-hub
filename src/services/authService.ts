@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User, LoginCredentials, ApiResponse } from '../types';
 
-const BASE_URL = 'https://13.49.65.169'; // or your deployed backend URL
+const BASE_URL = 'https://nexaveda.duckdns.org'; // or your deployed backend URL
 
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<ApiResponse<User>> => {
